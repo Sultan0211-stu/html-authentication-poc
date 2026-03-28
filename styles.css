@@ -1,0 +1,629 @@
+/* ================================================================
+   styles.css — AuthSystem UI
+   Google Fonts + CSS Variables + All Component Styles
+================================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ----------------------------------------------------------------
+   1. CSS VARIABLES
+---------------------------------------------------------------- */
+:root {
+  --clr-primary:       #6366f1;
+  --clr-primary-dark:  #4f46e5;
+  --clr-primary-light: #eef2ff;
+  --clr-secondary:     #06b6d4;
+  --clr-success:       #10b981;
+  --clr-danger:        #ef4444;
+  --clr-warning:       #f59e0b;
+
+  --clr-bg:            #f0f4ff;
+  --clr-card:          #ffffff;
+  --clr-navbar:        #ffffff;
+  --clr-text:          #1e293b;
+  --clr-muted:         #64748b;
+  --clr-border:        #e2e8f0;
+
+  --gradient-main:     linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+  --gradient-bg:       linear-gradient(135deg, #eef2ff 0%, #ecfeff 50%, #f0fdf4 100%);
+
+  --shadow-card:       0 4px 24px rgba(99, 102, 241, 0.10);
+  --shadow-card-hover: 0 12px 40px rgba(99, 102, 241, 0.20);
+  --shadow-btn:        0 4px 14px rgba(99, 102, 241, 0.35);
+
+  --radius-card:       18px;
+  --radius-input:      10px;
+  --radius-btn:        10px;
+
+  --transition:        0.28s ease;
+  --font:              'Poppins', sans-serif;
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] {
+  --clr-primary:       #818cf8;
+  --clr-primary-dark:  #6366f1;
+  --clr-primary-light: #1e1b4b;
+
+  --clr-bg:            #0f172a;
+  --clr-card:          #1e293b;
+  --clr-navbar:        #1e293b;
+  --clr-text:          #f1f5f9;
+  --clr-muted:         #94a3b8;
+  --clr-border:        #334155;
+
+  --gradient-bg:       linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  --shadow-card:       0 4px 24px rgba(0,0,0,0.35);
+  --shadow-card-hover: 0 12px 40px rgba(0,0,0,0.55);
+}
+
+/* ----------------------------------------------------------------
+   2. RESET & BASE
+---------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--gradient-bg);
+  color: var(--clr-text);
+  min-height: 100vh;
+  transition: background var(--transition), color var(--transition);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,h2,h3,h4,h5,h6 { font-family: var(--font); color: var(--clr-text); }
+
+a {
+  color: var(--clr-primary);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+a:hover { color: var(--clr-primary-dark); text-decoration: underline; }
+
+/* ----------------------------------------------------------------
+   3. AUTH PAGE LAYOUT
+---------------------------------------------------------------- */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: var(--gradient-bg);
+  position: relative;
+  overflow: hidden;
+  transition: background var(--transition);
+}
+
+/* Decorative background circles */
+.auth-page::before,
+.auth-page::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+.auth-page::before {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(99,102,241,.18) 0%, transparent 70%);
+  top: -150px; left: -150px;
+  animation: bgFloat 10s ease-in-out infinite alternate;
+}
+.auth-page::after {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(6,182,212,.14) 0%, transparent 70%);
+  bottom: -120px; right: -120px;
+  animation: bgFloat 12s ease-in-out infinite alternate-reverse;
+}
+[data-theme="dark"] .auth-page::before { opacity: .4; }
+[data-theme="dark"] .auth-page::after  { opacity: .4; }
+
+@keyframes bgFloat {
+  from { transform: scale(1) translate(0,0); }
+  to   { transform: scale(1.15) translate(30px,-30px); }
+}
+
+/* ----------------------------------------------------------------
+   4. AUTH CARD
+---------------------------------------------------------------- */
+.auth-card {
+  position: relative;
+  z-index: 1;
+  background: var(--clr-card);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 2.75rem 2.25rem;
+  width: 100%;
+  max-width: 460px;
+  animation: cardIn .4s cubic-bezier(.22,1,.36,1) both;
+  transition: box-shadow var(--transition), background var(--transition), border-color var(--transition);
+}
+.auth-card:hover { box-shadow: var(--shadow-card-hover); }
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Brand icon */
+.brand-icon {
+  width: 60px; height: 60px;
+  background: var(--gradient-main);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.25rem;
+  font-size: 1.7rem; color: #fff;
+  box-shadow: 0 6px 22px rgba(99,102,241,.38);
+  animation: iconPulse 3s ease-in-out infinite;
+}
+@keyframes iconPulse {
+  0%,100% { box-shadow: 0 6px 22px rgba(99,102,241,.38); }
+  50%      { box-shadow: 0 6px 32px rgba(99,102,241,.62); }
+}
+
+.card-eyebrow {
+  text-align: center;
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--clr-primary);
+  margin-bottom: .2rem;
+}
+
+.card-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--clr-text);
+  margin-bottom: .3rem;
+}
+
+.card-subtitle {
+  text-align: center;
+  font-size: .875rem;
+  color: var(--clr-muted);
+  margin-bottom: 1.85rem;
+}
+
+/* ----------------------------------------------------------------
+   5. FORM CONTROLS
+---------------------------------------------------------------- */
+.form-label {
+  font-size: .85rem;
+  font-weight: 500;
+  color: var(--clr-text);
+  margin-bottom: .4rem;
+  transition: color var(--transition);
+}
+
+.form-control, .form-select {
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius-input);
+  padding: .65rem 1rem;
+  font-size: .9rem;
+  font-family: var(--font);
+  color: var(--clr-text);
+  background: var(--clr-card);
+  transition: border-color var(--transition), box-shadow var(--transition),
+              background var(--transition), color var(--transition);
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--clr-primary);
+  box-shadow: 0 0 0 3.5px rgba(99,102,241,.16);
+  outline: none;
+  background: var(--clr-card);
+  color: var(--clr-text);
+}
+.form-control::placeholder { color: var(--clr-muted); opacity: .7; }
+
+/* Icon-prefixed input */
+.input-wrap { position: relative; }
+.input-wrap .input-icon {
+  position: absolute; left: .9rem; top: 50%;
+  transform: translateY(-50%);
+  color: var(--clr-muted); font-size: .95rem;
+  pointer-events: none; z-index: 5;
+  transition: color var(--transition);
+}
+.input-wrap:focus-within .input-icon { color: var(--clr-primary); }
+.input-wrap .form-control { padding-left: 2.5rem; }
+
+/* Input group (show/hide toggle) */
+.input-group .form-control {
+  border-right: none;
+  border-radius: var(--radius-input) 0 0 var(--radius-input);
+}
+.input-group .btn-eye {
+  border: 1.5px solid var(--clr-border);
+  border-left: none;
+  border-radius: 0 var(--radius-input) var(--radius-input) 0;
+  background: var(--clr-card);
+  color: var(--clr-muted);
+  padding: 0 .9rem;
+  transition: color var(--transition), background var(--transition);
+}
+.input-group .btn-eye:hover  { color: var(--clr-primary); background: var(--clr-primary-light); }
+.input-group .btn-eye:focus  { box-shadow: none; outline: none; }
+
+/* Validation */
+.form-control.is-invalid { border-color: var(--clr-danger);  background-image: none; }
+.form-control.is-valid   { border-color: var(--clr-success); background-image: none; }
+.invalid-feedback { font-size: .78rem; color: var(--clr-danger);  margin-top: .3rem; display: flex; align-items: center; gap: .3rem; }
+.valid-feedback   { font-size: .78rem; color: var(--clr-success); margin-top: .3rem; }
+.invalid-feedback::before { content: '\F333'; font-family: 'bootstrap-icons'; font-size: .72rem; }
+
+.form-check-input:checked { background-color: var(--clr-primary); border-color: var(--clr-primary); }
+.form-check-input:focus   { box-shadow: 0 0 0 3px rgba(99,102,241,.18); }
+
+/* ----------------------------------------------------------------
+   6. BUTTONS
+---------------------------------------------------------------- */
+/* Primary gradient button */
+.btn-auth {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  width: 100%;
+  background: var(--gradient-main);
+  border: none;
+  border-radius: var(--radius-btn);
+  color: #fff;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: .95rem;
+  padding: .72rem 1.5rem;
+  cursor: pointer;
+  transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition);
+  text-decoration: none;
+  position: relative; overflow: hidden;
+}
+.btn-auth:hover  { opacity: .9; transform: translateY(-2px); box-shadow: var(--shadow-btn); color: #fff; text-decoration: none; }
+.btn-auth:active { transform: translateY(0); opacity: 1; }
+.btn-auth:disabled { opacity: .65; cursor: not-allowed; transform: none; }
+.btn-auth .spinner-border { width: 1.1rem; height: 1.1rem; border-width: 2px; }
+
+/* Social button */
+.btn-social {
+  display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+  width: 100%;
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius-btn);
+  background: var(--clr-card);
+  color: var(--clr-text);
+  font-family: var(--font);
+  font-size: .875rem; font-weight: 500;
+  padding: .62rem 1rem;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition),
+              color var(--transition), transform var(--transition), box-shadow var(--transition);
+  text-decoration: none;
+}
+.btn-social:hover {
+  background: var(--clr-primary-light);
+  border-color: var(--clr-primary);
+  color: var(--clr-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card);
+  text-decoration: none;
+}
+
+/* ----------------------------------------------------------------
+   7. DIVIDER
+---------------------------------------------------------------- */
+.auth-divider {
+  display: flex; align-items: center; gap: .75rem;
+  margin: 1.35rem 0;
+  font-size: .78rem; color: var(--clr-muted);
+}
+.auth-divider::before, .auth-divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: var(--clr-border);
+  transition: background var(--transition);
+}
+
+/* ----------------------------------------------------------------
+   8. PASSWORD STRENGTH
+---------------------------------------------------------------- */
+.strength-bar { display: flex; gap: 5px; margin-top: .55rem; }
+.strength-seg {
+  flex: 1; height: 4px; border-radius: 4px;
+  background: var(--clr-border);
+  transition: background var(--transition);
+}
+.strength-seg.weak   { background: var(--clr-danger); }
+.strength-seg.fair   { background: var(--clr-warning); }
+.strength-seg.good   { background: var(--clr-secondary); }
+.strength-seg.strong { background: var(--clr-success); }
+
+.strength-text {
+  font-size: .75rem; font-weight: 500; margin-top: .3rem;
+  transition: color var(--transition);
+}
+
+/* ----------------------------------------------------------------
+   9. REQUIREMENTS CHECKLIST
+---------------------------------------------------------------- */
+.req-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: .3rem .75rem;
+  list-style: none; padding: 0; margin: 0 0 1rem;
+}
+.req-grid li {
+  font-size: .76rem; color: var(--clr-muted);
+  display: flex; align-items: center; gap: .3rem;
+  transition: color var(--transition);
+}
+.req-grid li.met { color: var(--clr-success); }
+
+/* ----------------------------------------------------------------
+   10. DARK MODE TOGGLE (auth pages)
+---------------------------------------------------------------- */
+.theme-btn {
+  position: fixed; top: 1.25rem; right: 1.25rem; z-index: 999;
+  width: 40px; height: 40px;
+  border-radius: 11px;
+  border: 1.5px solid var(--clr-border);
+  background: var(--clr-card);
+  color: var(--clr-muted);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; cursor: pointer;
+  box-shadow: var(--shadow-card);
+  transition: background var(--transition), color var(--transition),
+              border-color var(--transition), transform var(--transition);
+}
+.theme-btn:hover {
+  background: var(--clr-primary); color: #fff;
+  border-color: var(--clr-primary); transform: rotate(20deg);
+}
+
+/* ----------------------------------------------------------------
+   11. DASHBOARD — NAVBAR
+---------------------------------------------------------------- */
+.dash-nav {
+  background: var(--clr-navbar);
+  border-bottom: 1px solid var(--clr-border);
+  box-shadow: 0 2px 12px rgba(99,102,241,.08);
+  padding: .75rem 0;
+  position: sticky; top: 0; z-index: 100;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.nav-brand {
+  display: flex; align-items: center; gap: .55rem;
+  text-decoration: none;
+}
+.nav-brand-icon {
+  width: 36px; height: 36px;
+  background: var(--gradient-main);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 1rem; flex-shrink: 0;
+}
+.nav-brand-name {
+  font-size: 1.15rem; font-weight: 700;
+  background: var(--gradient-main);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.nav-theme-btn {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  border: 1.5px solid var(--clr-border);
+  background: var(--clr-bg);
+  color: var(--clr-muted);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: .95rem; cursor: pointer;
+  transition: background var(--transition), color var(--transition),
+              border-color var(--transition), transform var(--transition);
+}
+.nav-theme-btn:hover {
+  background: var(--clr-primary); color: #fff;
+  border-color: var(--clr-primary); transform: rotate(20deg);
+}
+
+.user-chip {
+  display: inline-flex; align-items: center; gap: .55rem;
+  background: var(--clr-primary-light);
+  border-radius: 50px;
+  padding: .28rem .85rem .28rem .28rem;
+  transition: background var(--transition);
+}
+.user-chip-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--gradient-main); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .78rem; font-weight: 700; flex-shrink: 0;
+}
+.user-chip-name { font-size: .82rem; font-weight: 500; color: var(--clr-primary); }
+
+.btn-logout {
+  display: inline-flex; align-items: center; gap: .4rem;
+  border: 1.5px solid var(--clr-danger);
+  color: var(--clr-danger);
+  border-radius: 9px;
+  padding: .38rem 1rem;
+  font-size: .85rem; font-weight: 500;
+  background: transparent; cursor: pointer;
+  transition: background var(--transition), color var(--transition),
+              transform var(--transition), box-shadow var(--transition);
+  text-decoration: none;
+}
+.btn-logout:hover {
+  background: var(--clr-danger); color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(239,68,68,.3);
+  text-decoration: none;
+}
+
+/* ----------------------------------------------------------------
+   12. DASHBOARD — MAIN
+---------------------------------------------------------------- */
+.dash-main {
+  padding: 2.5rem 0 4rem;
+  background: var(--gradient-bg);
+  min-height: calc(100vh - 66px);
+  transition: background var(--transition);
+}
+
+/* Welcome banner */
+.welcome-banner {
+  background: var(--gradient-main);
+  border-radius: var(--radius-card);
+  padding: 2rem 2.5rem;
+  color: #fff;
+  margin-bottom: 2rem;
+  position: relative; overflow: hidden;
+}
+.welcome-banner::before {
+  content: ''; position: absolute;
+  width: 240px; height: 240px; border-radius: 50%;
+  background: rgba(255,255,255,.07);
+  top: -70px; right: -70px;
+}
+.welcome-banner::after {
+  content: ''; position: absolute;
+  width: 180px; height: 180px; border-radius: 50%;
+  background: rgba(255,255,255,.05);
+  bottom: -60px; right: 80px;
+}
+.welcome-banner .wb-badge {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: rgba(255,255,255,.2);
+  border-radius: 50px; padding: .28rem .85rem;
+  font-size: .75rem; font-weight: 500; color: #fff;
+  margin-bottom: .75rem;
+}
+.welcome-banner h2 {
+  font-size: 1.6rem; font-weight: 700; color: #fff;
+  margin-bottom: .35rem; position: relative; z-index: 1;
+}
+.welcome-banner p {
+  opacity: .85; font-size: .9rem; margin: 0;
+  position: relative; z-index: 1;
+}
+
+/* Stat cards */
+.stat-card {
+  background: var(--clr-card);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-card);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+  height: 100%;
+  transition: box-shadow var(--transition), transform var(--transition),
+              background var(--transition), border-color var(--transition);
+}
+.stat-card:hover { box-shadow: var(--shadow-card-hover); transform: translateY(-4px); }
+
+.stat-icon {
+  width: 50px; height: 50px; border-radius: 13px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; margin-bottom: 1rem; flex-shrink: 0;
+}
+.si-purple { background: #eef2ff; color: #6366f1; }
+.si-cyan   { background: #ecfeff; color: #06b6d4; }
+.si-green  { background: #d1fae5; color: #10b981; }
+.si-amber  { background: #fef3c7; color: #f59e0b; }
+
+[data-theme="dark"] .si-purple { background: rgba(99,102,241,.2);  color: #818cf8; }
+[data-theme="dark"] .si-cyan   { background: rgba(6,182,212,.2);   color: #22d3ee; }
+[data-theme="dark"] .si-green  { background: rgba(16,185,129,.2);  color: #34d399; }
+[data-theme="dark"] .si-amber  { background: rgba(245,158,11,.2);  color: #fbbf24; }
+
+.stat-val   { font-size: 1.75rem; font-weight: 700; color: var(--clr-text); line-height: 1; margin-bottom: .2rem; }
+.stat-lbl   { font-size: .82rem;  color: var(--clr-muted); }
+.stat-trend { font-size: .75rem;  font-weight: 500; margin-top: .45rem; }
+.trend-up   { color: var(--clr-success); }
+.trend-dn   { color: var(--clr-danger); }
+
+/* Info cards (activity, quick actions, progress) */
+.info-card {
+  background: var(--clr-card);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-card);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+  height: 100%;
+  transition: background var(--transition), border-color var(--transition);
+}
+.info-card-hd {
+  font-size: .95rem; font-weight: 600; color: var(--clr-text);
+  margin-bottom: 1.2rem;
+  display: flex; align-items: center; gap: .5rem;
+}
+
+/* Activity list */
+.act-item {
+  display: flex; align-items: flex-start; gap: .85rem;
+  padding: .7rem 0;
+  border-bottom: 1px solid var(--clr-border);
+  transition: border-color var(--transition);
+}
+.act-item:last-child { border-bottom: none; }
+.act-dot { width: 9px; height: 9px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+.act-body { flex: 1; }
+.act-text { font-size: .85rem; color: var(--clr-text); margin-bottom: .12rem; }
+.act-meta { font-size: .73rem; color: var(--clr-muted); }
+.act-time { font-size: .73rem; color: var(--clr-muted); white-space: nowrap; }
+
+/* Quick action tiles */
+.qa-tile {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: .55rem;
+  padding: 1.2rem .75rem;
+  border-radius: var(--radius-input);
+  border: 1.5px solid var(--clr-border);
+  background: var(--clr-card);
+  color: var(--clr-text);
+  font-size: .78rem; font-weight: 500;
+  text-align: center; cursor: pointer; text-decoration: none;
+  transition: background var(--transition), border-color var(--transition),
+              color var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+.qa-tile:hover {
+  border-color: var(--clr-primary);
+  background: var(--clr-primary-light);
+  color: var(--clr-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+  text-decoration: none;
+}
+.qa-tile i { font-size: 1.4rem; }
+
+/* Progress bars */
+.prog-wrap { height: 6px; border-radius: 6px; background: var(--clr-border); overflow: hidden; margin-top: .45rem; }
+.prog-bar  { height: 100%; border-radius: 6px; background: var(--gradient-main); transition: width .6s ease; }
+
+/* ----------------------------------------------------------------
+   13. SUCCESS STATE (forgot password)
+---------------------------------------------------------------- */
+.success-state { text-align: center; padding: .5rem 0; }
+.success-icon  { font-size: 3.5rem; color: var(--clr-success); margin-bottom: .75rem; }
+.success-title { font-size: 1rem; font-weight: 600; color: var(--clr-text); margin-bottom: .4rem; }
+.success-desc  { font-size: .875rem; color: var(--clr-muted); margin-bottom: 1.5rem; }
+
+/* ----------------------------------------------------------------
+   14. RESPONSIVE
+---------------------------------------------------------------- */
+@media (max-width: 575px) {
+  .auth-card { padding: 2rem 1.25rem; border-radius: 14px; }
+  .card-title { font-size: 1.35rem; }
+  .welcome-banner { padding: 1.5rem 1.25rem; }
+  .welcome-banner h2 { font-size: 1.3rem; }
+  .req-grid { grid-template-columns: 1fr; }
+  .stat-val { font-size: 1.5rem; }
+}
+@media (min-width: 768px) {
+  .auth-card { padding: 3rem 2.5rem; }
+}
+@media (min-width: 1366px) {
+  .auth-card { max-width: 480px; }
+  .dash-main { padding: 3rem 0 5rem; }
+}
+@media (min-width: 1920px) {
+  .auth-card { max-width: 520px; }
+  .welcome-banner h2 { font-size: 2rem; }
+}
